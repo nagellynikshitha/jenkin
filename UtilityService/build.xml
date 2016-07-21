@@ -1,28 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xml>
+<?xml version="1.0" ?> 
+<project name="UtilityService" default="war">
 
-<project name="UtilityService" default="warfile">
-    
 	<path id="compile.classpath">
 		<fileset dir="WebContent/WEB-INF/lib">
-			<include name="*.jar" />
+			<include name="*.jar"/>
 		</fileset>
 	</path>
-<target name="clean">
-		<delete dir="warfile" />
-		
+	
+	<target name="init">
+		<mkdir dir="build/classes"/>
+		<mkdir dir="warfile" />
 	</target>
-	<target name="compile">
-		<javac   includeantruntime="false" destdir="build/classes" debug="true" srcdir="src">
-			<classpath refid="compile.classpath" />
+	
+	<target name="compile" depends="init" >
+		<javac destdir="build/classes" debug="true" srcdir="src">
+			<classpath refid="compile.classpath"/>
 		</javac>
 	</target>
 	
-	<target name="warfile" depends="clean, compile">
-		<mkdir dir="warfile" />
-		<war destfile="warfile/${ant.project.name}.war" basedir="WebContent" >
-			<classes dir="build/classes" />
+	<target name="war" depends="compile">
+		<war destfile="C:/BCJMAY16/Software/apache-tomcat-8.0.35/webapps/UtilityService.war" webxml="WebContent/WEB-INF/web.xml">
+			<fileset dir="WebContent"/>
+			<!--<lib dir="WebContent/WEB-INF/lib"/>-->
+			<classes dir="build/classes"/>
 		</war>
-
 	</target>
+	
+	<target name="clean">
+		<delete dir="warfile" />
+		<delete dir="build" />
+	</target>
+	
 </project>
