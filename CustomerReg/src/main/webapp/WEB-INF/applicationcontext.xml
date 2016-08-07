@@ -1,0 +1,76 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		 http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+	<bean id="storeDao" class="com.bootcamp.customerregistration.dao.CustomerDaoImpl" />
+
+	<bean id="regService" class="com.bootcamp.customerregistration.service.CustomerserviceImpl" />
+
+	<bean id="serplan" class="com.bootcamp.customerregistration.service.SoapClient" />
+	
+	<bean id="testjms" class="com.bootcamp.customerregistration.jms.TestJmsSender" />
+	
+	<bean id= "restclient" class="com.bootcamp.customerregistration.service.RestClient"/>
+	
+	<mvc:annotation-driven />
+
+	
+	<context:property-placeholder location="/WEB-INF/data-access.properties"
+		system-properties-mode="OVERRIDE" />
+
+
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiEnvironment">
+			<props>
+				<prop key="java.naming.factory.initial">${jndi.contextFactory}</prop>
+				<prop key="java.naming.provider.url">${jndi.url}</prop>
+				<prop key="java.naming.security.principal">weblogic</prop>
+				<prop key="java.naming.security.credentials">missnikki5</prop>
+			</props>
+		</property>
+		<property name="jndiName" value="${jndi.name}" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.bootcamp.customerregistration.model.Customer</value>
+				<value>com.bootcamp.customerregistration.model.Service_Plan</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<!-- <prop key="hbm2ddl.auto">create</prop> -->
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+
+		</property>
+
+		</bean>
+
+	<tx:annotation-driven />	
+	
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+<!-- 	<cxf:bus>
+		<cxf:features>
+			<cxf:logging />
+		</cxf:features>
+	</cxf:bus>
+
+	<jaxws:endpoint id="custserviceendpoint" implementor="#regService" address="/custcontrol">
+	</jaxws:endpoint> -->
+</beans>

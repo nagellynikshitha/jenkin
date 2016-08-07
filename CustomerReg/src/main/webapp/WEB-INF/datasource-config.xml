@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx 
+    	http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- ========================= DATASOURCE DEFINITION ========================= -->
+	
+
+	<context:property-placeholder location="/WEB-INF/data-access.properties"
+		system-properties-mode="OVERRIDE" />
+
+
+
+	<!-- DataSource configuration for the weblogic jdbc connection pool -->
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiEnvironment">
+			<props>
+				<prop key="java.naming.factory.initial">${jndi.contextFactory}</prop>
+				<prop key="java.naming.provider.url">${jndi.url}</prop>
+				<prop key="java.naming.security.principal">weblogic</prop>
+				<prop key="java.naming.security.credentials">missnikki5</prop>
+			</props>
+		</property>
+		<property name="jndiName" value="${jndi.name}" />
+	</bean>
+
+	<!-- <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
+		<property name="jndiName" value="java:comp/env/jdbc/ck" /> </bean> -->
+
+</beans>
